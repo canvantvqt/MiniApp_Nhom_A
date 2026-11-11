@@ -155,15 +155,30 @@ def make_csv_download(df):
     return df.to_csv(index=False).encode("utf-8-sig")
 
 
+
 def read_uploaded_file(uploaded_file):
-    """Đọc CSV hoặc Excel; không yêu cầu kết nối cơ sở dữ liệu."""
+    """Đọc CSV hoặc Excel theo đúng cấu trúc dữ liệu Nhóm A."""
     filename = uploaded_file.name.lower()
+
     if filename.endswith(".csv"):
         return pd.read_csv(uploaded_file)
-    if filename.endswith(".xlsx") or filename.endswith(".xls"):
-        return pd.read_excel(uploaded_file)
-    raise ValueError("Chỉ hỗ trợ tệp .csv, .xlsx hoặc .xls.")
 
+    if filename.endswith(".xlsx"):
+        return pd.read_excel(
+            uploaded_file,
+            sheet_name="Du_lieu_khao_sat",
+            header=3
+        )
+
+    if filename.endswith(".xls"):
+        return pd.read_excel(
+            uploaded_file,
+            header=3
+        )
+
+    raise ValueError(
+        "Chỉ hỗ trợ tệp .csv, .xlsx hoặc .xls."
+    )
 
 # ---------------------- 4. GIAO DIỆN CHUNG ---------------------
 st.title("🥗 Trợ lý dinh dưỡng học đường")
